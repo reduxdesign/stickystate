@@ -1,36 +1,35 @@
-// Sticky State: A script to toggle the 'is-stuck' class on elements as they stick or unstick
+// Sticky State: A JavaScript utility for toggling a class on sticky elements based on scroll position.
 
-// Using an Immediately Invoked Function Expression (IIFE) to avoid polluting the global namespace
 (function() {
-  // Setup is initiated once the DOM is fully loaded
+  // Listener for the DOMContentLoaded event to ensure the DOM is fully loaded before running the script.
   document.addEventListener('DOMContentLoaded', function() {
       setupStickyState();
   });
 
-  // This function sets up the sticky state for elements with the 'data-sticky-id' attribute
+  // Function to setup the sticky state for elements.
   function setupStickyState() {
-    // Selecting all elements that are marked to be observed
-    const stickyElements = document.querySelectorAll("[data-sticky-id]");
-    
-    // Configuration for the IntersectionObserver
-    // Threshold set to 0 to trigger as soon as the element starts going out of view
+    // Select all elements that are intended to be sticky.
+    const stickyElements = document.querySelectorAll(".sticky");
+
+    // Options for the IntersectionObserver.
     const observerOptions = {
-      threshold: [0]
+      threshold: [0] // Threshold is set to 0, triggering the callback whenever an element starts going out of view.
     };
 
-    // Callback function for the IntersectionObserver
-    // This function is called whenever the visibility of the target elements changes
+    // Callback function for the IntersectionObserver.
+    // This function will be called each time the visibility of the observed element changes.
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
-        const stickyElement = document.querySelector(`[data-sticky-id="${entry.target.dataset.stickyId}"]`);
+        // Using the dataset of the sentinel to find the associated sticky element.
+        const stickyElement = document.querySelector(`.sticky[data-sticky-id="${entry.target.dataset.stickyId}"]`);
 
-        // Handling the case where a sticky element is not found
+        // Warning if the associated sticky element is not found.
         if (!stickyElement) {
           console.warn(`Sticky element with data-sticky-id="${entry.target.dataset.stickyId}" not found.`);
           return;
         }
 
-        // Adding or removing the 'is-stuck' class based on the element's position
+        // Toggling the 'is-stuck' class based on whether the element is intersecting.
         if (!entry.isIntersecting) {
           stickyElement.classList.add("is-stuck");
         } else {
@@ -39,36 +38,32 @@
       });
     };
 
-    // Creating an instance of IntersectionObserver
+    // Creating an IntersectionObserver instance with the specified callback and options.
     let observer;
     try {
       observer = new IntersectionObserver(observerCallback, observerOptions);
     } catch (e) {
+      // Error handling for browsers that do not support IntersectionObserver.
       console.error("IntersectionObserver is not supported in this browser.", e);
       return;
     }
 
-    // A set to keep track of used IDs to ensure uniqueness
-    const usedIds = new Set();
-    let autoIncrement = 0;
-
-    // Processing each sticky element
-    stickyElements.forEach((stickyElement) => {
-      let stickyId = stickyElement.dataset.stickyId;
-
-      // Generating a unique ID if the existing one is empty or a duplicate
-      if (!stickyId || usedIds.has(stickyId)) {
-        do {
-          stickyId = `sticky-${autoIncrement++}`;
-        } while (usedIds.has(stickyId));
-      }
-
-      // Assigning the unique ID and adding it to the set of used IDs
+    // Assigning unique identifiers and creating sentinel elements for each sticky element.
+    stickyElements.forEach((stickyElement, index) => {
+      // Assign a unique identifier to each sticky element.
+      const stickyId = `sticky-${index}`;
       stickyElement.dataset.stickyId = stickyId;
-      usedIds.add(stickyId);
 
-      // Observing each sticky element
-      observer.observe(stickyElement);
+      // Creating a sentinel element to observe.
+      const sentinel = document.createElement("div");
+      sentinel.className = 'sticky-sentinel';
+      sentinel.dataset.stickyId = stickyId;
+
+      // Placing the sentinel in the DOM before the sticky element.
+      stickyElement.parentNode.insertBefore(sentinel, stickyElement);
+
+      // Start observing the sentinel.
+      observer.observe(sentinel);
     });
   }
 })();
