@@ -58,6 +58,16 @@
       const sentinel = document.createElement("div");
       sentinel.className = 'sticky-sentinel';
       sentinel.dataset.stickyId = stickyId;
+      // Give the sentinel a minimal size so IntersectionObserver
+      // correctly detects when it scrolls out of view without
+      // affecting layout.
+      sentinel.style.position = 'absolute';
+      sentinel.style.top = '0';
+      sentinel.style.left = '0';
+      sentinel.style.width = '1px';
+      sentinel.style.height = '1px';
+      sentinel.style.pointerEvents = 'none';
+      sentinel.style.visibility = 'hidden';
 
       // Placing the sentinel in the DOM before the sticky element.
       stickyElement.parentNode.insertBefore(sentinel, stickyElement);
