@@ -1,4 +1,4 @@
-// Sticky State: A JavaScript utility for toggling a class on sticky elements based on scroll position.
+// Sticky State toggles 'is-stuck' when sticky elements leave or reenter view.
 
 (function() {
   // If the DOM is already parsed, initialize immediately. Otherwise, wait for DOMContentLoaded.
