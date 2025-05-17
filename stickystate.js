@@ -11,9 +11,11 @@
     // Select all elements that are intended to be sticky.
     const stickyElements = document.querySelectorAll(".sticky");
 
-    // Options for the IntersectionObserver.
+    // Options for the IntersectionObserver. A threshold of 0
+    // fires the callback when the sentinel enters or leaves the
+    // viewport.
     const observerOptions = {
-      threshold: [0] // Threshold is set to 0, triggering the callback whenever an element starts going out of view.
+      threshold: [0] // Fires when the sentinel enters or leaves the viewport.
     };
 
     // Callback function for the IntersectionObserver.
