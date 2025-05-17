@@ -1,10 +1,14 @@
 // Sticky State: A JavaScript utility for toggling a class on sticky elements based on scroll position.
 
 (function() {
-  // Listener for the DOMContentLoaded event to ensure the DOM is fully loaded before running the script.
-  document.addEventListener('DOMContentLoaded', function() {
+  // If the DOM is already parsed, initialize immediately. Otherwise, wait for DOMContentLoaded.
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
       setupStickyState();
-  });
+  } else {
+      document.addEventListener('DOMContentLoaded', function() {
+          setupStickyState();
+      });
+  }
 
   // Function to setup the sticky state for elements.
   function setupStickyState() {
