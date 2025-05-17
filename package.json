@@ -1,0 +1,19 @@
+{
+  "name": "stickystate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "stickystate.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  }
+}

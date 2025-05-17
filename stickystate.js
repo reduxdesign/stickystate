@@ -82,4 +82,11 @@
       observer.observe(sentinel);
     });
   }
+
+  // Expose setupStickyState for use in modules and tests
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = setupStickyState;
+  } else {
+    window.setupStickyState = setupStickyState;
+  }
 })();
